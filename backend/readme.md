@@ -1,11 +1,12 @@
+# API Documentation
 
-# User Authentication API
-
-This API provides endpoints for user registration and login.
+This API provides endpoints for user and captain registration, login, profile retrieval, and logout.
 
 ## Endpoints
 
-### 1. Register User
+### User Endpoints
+
+#### 1. Register User
 
 **URL:** `/user/register`
 
@@ -72,7 +73,7 @@ This API provides endpoints for user registration and login.
   }
   ```
 
-### 2. Login User
+#### 2. Login User
 
 **URL:** `/user/login`
 
@@ -150,59 +151,98 @@ This API provides endpoints for user registration and login.
   }
   ```
 
-## How to Use
+#### 3. Get User Profile
 
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Create a `.env` file in the 
+**URL:** `/user/profile`
 
-backend
+**Method:** `GET`
 
- folder with the following variables:
-   ```
-   PORT=your_port
-   DB_URL=your_database_url
-   JWT_SECRET=your_jwt_secret
-   ```
-4. Start the server using `npm start`.
-5. Use the endpoints as described above.
+**Description:** This endpoint retrieves the profile of the logged-in user.
+
+**Headers:**
+```
+Authorization: Bearer <jwt_token>
 ```
 
-Save this content in a file named `README.md` in the `backend` folder.
-Save this content in a file named `README.md` in the `backend` folder.
+**Response:**
 
-NishantPatelxx: create readme.md file to docs to user/register and user/login endpoint with description and error codes also write how data is required in endpoints. create md file in backend folder
+- **200 OK**
+  ```json
+  {
+    "_id": "user_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+  ```
 
-Workspace: Enable Claude 3.5 Sonnet (Preview) for all clients
-Enable access to the latest Claude 3.5 Sonnet model from Anthropic. [Learn more about how GitHub Copilot serves Claude 3.5 Sonnet](https://docs.github.com/copilot/using-github-copilot/using-claude-sonnet-in-github-copilot).
+- **401 Unauthorized**
+  ```json
+  {
+    "message": "No token provided"
+  }
+  ```
 
-NishantPatelxx: @workspace Enable: "Enable Claude 3.5 Sonnet (Preview) for all clients"
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
 
-Workspace: Collecting workspace information
+- **500 Internal Server Error**
+  ```json
+  {
+    "message": "Internal Server Error"
+  }
+  ```
 
-NishantPatelxx: create readme.md file to docs to user/register and user/login endpoint with description and error codes also write how data is required in endpoints. create md file in backend folder. generate file and add it in Backend folder
+#### 4. Logout User
 
+**URL:** `/user/logout`
 
-GitHub Copilot: Here is the `README.md` file for the 
+**Method:** `GET`
 
-backend
+**Description:** This endpoint logs out the user by clearing the authentication token.
 
- folder:
+**Headers:**
+```
+Authorization: Bearer <jwt_token>
+```
 
-```markdown
-# User Authentication API
+**Response:**
 
-This API provides endpoints for user registration and login.
+- **200 OK**
+  ```json
+  {
+    "message": "Logged out"
+  }
+  ```
 
-## Endpoints
+- **401 Unauthorized**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
 
-### 1. Register User
+- **500 Internal Server Error**
+  ```json
+  {
+    "message": "Internal Server Error"
+  }
+  ```
 
-**URL:** `/user/register`
+### Captain Endpoints
+
+#### 1. Register Captain
+
+**URL:** `/captain/register`
 
 **Method:** `POST`
 
-**Description:** This endpoint registers a new user.
+**Description:** This endpoint registers a new captain.
 
 **Request Body:**
 ```json
@@ -212,7 +252,13 @@ This API provides endpoints for user registration and login.
     "lastname": "Doe"
   },
   "email": "john.doe@example.com",
-  "password": "password123"
+  "password": "password123",
+  "vehicle": {
+    "color": "red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
 }
 ```
 
@@ -222,13 +268,19 @@ This API provides endpoints for user registration and login.
   ```json
   {
     "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
+    "captain": {
+      "_id": "captain_id",
       "fullname": {
         "firstname": "John",
         "lastname": "Doe"
       },
-      "email": "john.doe@example.com"
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
     }
   }
   ```
@@ -263,13 +315,13 @@ This API provides endpoints for user registration and login.
   }
   ```
 
-### 2. Login User
+#### 2. Login Captain
 
-**URL:** `/user/login`
+**URL:** `/captain/login`
 
 **Method:** `POST`
 
-**Description:** This endpoint logs in an existing user.
+**Description:** This endpoint logs in an existing captain.
 
 **Request Body:**
 ```json
@@ -285,13 +337,19 @@ This API provides endpoints for user registration and login.
   ```json
   {
     "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
+    "captain": {
+      "_id": "captain_id",
       "fullname": {
         "firstname": "John",
         "lastname": "Doe"
       },
-      "email": "john.doe@example.com"
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
     }
   }
   ```
@@ -341,52 +399,17 @@ This API provides endpoints for user registration and login.
   }
   ```
 
-## How to Use
+#### 3. Get Captain Profile
 
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Create a `.env` file in the 
+**URL:** `/captain/profile`
 
-backend
+**Method:** `GET`
 
- folder with the following variables:
-   ```
-   PORT=your_port
-   DB_URL=your_database_url
-   JWT_SECRET=your_jwt_secret
-   ```
-4. Start the server using `npm start`.
-5. Use the endpoints as described above.
+**Description:** This endpoint retrieves the profile of the logged-in captain.
+
+**Headers:**
 ```
-
-Save this content in a file named `README.md` in the `backend` folder.
-Save this content in a file named `README.md` in the `backend` folder.
-
-NishantPatelxx: login user docs
-
-GitHub Copilot: Here is the documentation for the login user endpoint:
-
-```markdown
-# User Authentication API
-
-This API provides endpoints for user registration and login.
-
-## Endpoints
-
-### 2. Login User
-
-**URL:** `/user/login`
-
-**Method:** `POST`
-
-**Description:** This endpoint logs in an existing user.
-
-**Request Body:**
-```json
-{
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
+Authorization: Bearer <jwt_token>
 ```
 
 **Response:**
@@ -394,53 +417,33 @@ This API provides endpoints for user registration and login.
 - **200 OK**
   ```json
   {
-    "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
+    "captain": {
+      "_id": "captain_id",
       "fullname": {
         "firstname": "John",
         "lastname": "Doe"
       },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
-- **400 Bad Request**
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Invalid Email",
-        "param": "email",
-        "location": "body"
-      },
-      {
-        "msg": "password should contain atleast 6 characters",
-        "param": "password",
-        "location": "body"
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
       }
-    ]
+    }
   }
   ```
 
 - **401 Unauthorized**
   ```json
   {
-    "message": "Both fields are required"
+    "message": "No token provided"
   }
   ```
 
   ```json
   {
-    "message": "Invalid Password"
-  }
-  ```
-
-- **404 Not Found**
-  ```json
-  {
-    "message": "Invalid email or password"
+    "message": "Unauthorized"
   }
   ```
 
@@ -451,119 +454,17 @@ This API provides endpoints for user registration and login.
   }
   ```
 
-## How to Use
+#### 4. Logout Captain
 
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Create a `.env` file in the 
+**URL:** `/captain/logout`
 
-backend
+**Method:** `GET`
 
- folder with the following variables:
-   ```
-   PORT=your_port
-   DB_URL=your_database_url
-   JWT_SECRET=your_jwt_secret
-   ```
-4. Start the server using `npm start`.
-5. Use the endpoints as described above.
+**Description:** This endpoint logs out the captain by clearing the authentication token.
+
+**Headers:**
 ```
-
-Save this content in a file named `README.md` in the `backend` folder.
-Save this content in a file named `README.md` in the `backend` folder.
-
-NishantPatelxx: give me register and login docs 
-
-GitHub Copilot: Here is the documentation for both the register and login user endpoints:
-
-```markdown
-# User Authentication API
-
-This API provides endpoints for user registration and login.
-
-## Endpoints
-
-### 1. Register User
-
-**URL:** `/user/register`
-
-**Method:** `POST`
-
-**Description:** This endpoint registers a new user.
-
-**Request Body:**
-```json
-{
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-
-- **201 Created**
-  ```json
-  {
-    "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
-- **400 Bad Request**
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Invalid email",
-        "param": "email",
-        "location": "body"
-      },
-      {
-        "msg": "First-name should contain atleast 3 or more characters",
-        "param": "fullname.firstname",
-        "location": "body"
-      },
-      {
-        "msg": "password should contain atleast 6 characters",
-        "param": "password",
-        "location": "body"
-      }
-    ]
-  }
-  ```
-
-- **500 Internal Server Error**
-  ```json
-  {
-    "message": "Internal server error"
-  }
-  ```
-
-### 2. Login User
-
-**URL:** `/user/login`
-
-**Method:** `POST`
-
-**Description:** This endpoint logs in an existing user.
-
-**Request Body:**
-```json
-{
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
+Authorization: Bearer <jwt_token>
 ```
 
 **Response:**
@@ -571,53 +472,14 @@ This API provides endpoints for user registration and login.
 - **200 OK**
   ```json
   {
-    "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
-- **400 Bad Request**
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Invalid Email",
-        "param": "email",
-        "location": "body"
-      },
-      {
-        "msg": "password should contain atleast 6 characters",
-        "param": "password",
-        "location": "body"
-      }
-    ]
+    "message": "Logged out"
   }
   ```
 
 - **401 Unauthorized**
   ```json
   {
-    "message": "Both fields are required"
-  }
-  ```
-
-  ```json
-  {
-    "message": "Invalid Password"
-  }
-  ```
-
-- **404 Not Found**
-  ```json
-  {
-    "message": "Invalid email or password"
+    "message": "Unauthorized"
   }
   ```
 
@@ -627,311 +489,3 @@ This API provides endpoints for user registration and login.
     "message": "Internal Server Error"
   }
   ```
-
-## How to Use
-
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Create a `.env` file in the 
-
-backend
-
- folder with the following variables:
-   ```
-   PORT=your_port
-   DB_URL=your_database_url
-   JWT_SECRET=your_jwt_secret
-   ```
-4. Start the server using `npm start`.
-5. Use the endpoints as described above.
-```
-
-Save this content in a file named `README.md` in the `backend` folder.
-Save this content in a file named `README.md` in the `backend` folder.
-
-NishantPatelxx: login docs
-
-GitHub Copilot: Here is the documentation for the login user endpoint:
-
-```markdown
-# User Authentication API
-
-This API provides endpoints for user registration and login.
-
-## Endpoints
-
-### Login User
-
-**URL:** `/user/login`
-
-**Method:** `POST`
-
-**Description:** This endpoint logs in an existing user.
-
-**Request Body:**
-```json
-{
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-
-- **200 OK**
-  ```json
-  {
-    "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
-- **400 Bad Request**
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Invalid Email",
-        "param": "email",
-        "location": "body"
-      },
-      {
-        "msg": "password should contain atleast 6 characters",
-        "param": "password",
-        "location": "body"
-      }
-    ]
-  }
-  ```
-
-- **401 Unauthorized**
-  ```json
-  {
-    "message": "Both fields are required"
-  }
-  ```
-
-  ```json
-  {
-    "message": "Invalid Password"
-  }
-  ```
-
-- **404 Not Found**
-  ```json
-  {
-    "message": "Invalid email or password"
-  }
-  ```
-
-- **500 Internal Server Error**
-  ```json
-  {
-    "message": "Internal Server Error"
-  }
-  ```
-
-## How to Use
-
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Create a `.env` file in the 
-
-backend
-
- folder with the following variables:
-   ```
-   PORT=your_port
-   DB_URL=your_database_url
-   JWT_SECRET=your_jwt_secret
-   ```
-4. Start the server using `npm start`.
-5. Use the endpoints as described above.
-```
-
-Save this content in a file named `README.md` in the `backend` folder.
-Save this content in a file named `README.md` in the `backend` folder.
-
-NishantPatelxx: PROVIDE REGISTER AND LOGIN IN SAME FILE SO I CAN JUST COPY AND PASTE IT 
-
-GitHub Copilot: Here is the combined documentation for both the register and login user endpoints:
-
-```markdown
-# User Authentication API
-
-This API provides endpoints for user registration and login.
-
-## Endpoints
-
-### 1. Register User
-
-**URL:** `/user/register`
-
-**Method:** `POST`
-
-**Description:** This endpoint registers a new user.
-
-**Request Body:**
-```json
-{
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-
-- **201 Created**
-  ```json
-  {
-    "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
-- **400 Bad Request**
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Invalid email",
-        "param": "email",
-        "location": "body"
-      },
-      {
-        "msg": "First-name should contain atleast 3 or more characters",
-        "param": "fullname.firstname",
-        "location": "body"
-      },
-      {
-        "msg": "password should contain atleast 6 characters",
-        "param": "password",
-        "location": "body"
-      }
-    ]
-  }
-  ```
-
-- **500 Internal Server Error**
-  ```json
-  {
-    "message": "Internal server error"
-  }
-  ```
-
-### 2. Login User
-
-**URL:** `/user/login`
-
-**Method:** `POST`
-
-**Description:** This endpoint logs in an existing user.
-
-**Request Body:**
-```json
-{
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-
-- **200 OK**
-  ```json
-  {
-    "token": "jwt_token",
-    "user": {
-      "_id": "user_id",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com"
-    }
-  }
-  ```
-
-- **400 Bad Request**
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Invalid Email",
-        "param": "email",
-        "location": "body"
-      },
-      {
-        "msg": "password should contain atleast 6 characters",
-        "param": "password",
-        "location": "body"
-      }
-    ]
-  }
-  ```
-
-- **401 Unauthorized**
-  ```json
-  {
-    "message": "Both fields are required"
-  }
-  ```
-
-  ```json
-  {
-    "message": "Invalid Password"
-  }
-  ```
-
-- **404 Not Found**
-  ```json
-  {
-    "message": "Invalid email or password"
-  }
-  ```
-
-- **500 Internal Server Error**
-  ```json
-  {
-    "message": "Internal Server Error"
-  }
-  ```
-
-## How to Use
-
-1. Clone the repository.
-2. Install dependencies using `npm install`.
-3. Create a `.env` file in the 
-
-backend
-
- folder with the following variables:
-   ```
-   PORT=your_port
-   DB_URL=your_database_url
-   JWT_SECRET=your_jwt_secret
-   ```
-4. Start the server using `npm start`.
-5. Use the endpoints as described above.
-```
-
-You can copy and paste this content into your `README.md` file in the `backend` folder.
-You can copy and paste this content into your `README.md` file in the `backend` folder.

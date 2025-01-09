@@ -1,7 +1,7 @@
 const userModel = require('../model/user.model')
 const userService = require("../services/user.service")
 const {validationResult} = require("express-validator")
-
+const blackListedToken = require("../model/blacklistedToekn.model")
 
 module.exports.register = async(req , res , next) => {
     try
@@ -67,3 +67,16 @@ module.exports.login = async (req, res, next) => {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
+  module.exports.getUserProfile = async(req , res , next) => {
+    return res.status(201).json(req.user)
+  }
+
+  module.exports.logout = async(req , res , next) =>{
+    res.clearCookie('token');
+    const token = req.cookies.token || req.headers.authorization.split(' ')[ 1 ];
+    await blackListedToken.create({ token });
+    return res.status(200).json({
+      message : "Logged out"
+    })
+  }
