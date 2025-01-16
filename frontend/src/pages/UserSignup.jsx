@@ -1,14 +1,55 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 const UserSignup = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userData, setUserData] = useState({});
+
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "firstname") setFirstName(value);
+    if (name === "lastname") setLastName(value);
+    if (name === "email") setEmail(value);
+    if (name === "password") setPassword(value);
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const newUser = {
+      fullname: {
+        firstname: firstName,
+        lastname: lastName
+      },
+      email: email,
+      password: password
+    };
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, newUser);
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data);
+        localStorage.setItem("token", data.token);
+        navigate('/home');
+      }
+    } catch (error) {
+      console.error("Signup failed", error);
+    }
+  };
+
   return (
     <div>
       <div className='p-7 h-screen flex flex-col justify-between'>
         <div>
           <img className='w-16 mb-10' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s" alt="" />
-
-          <form>
+          <form onSubmit={submitHandler}>
             <h3 className='text-lg w-1/2 font-medium mb-2'>What's your name</h3>
             <div className='flex gap-4 mb-7'>
               <input
@@ -16,31 +57,40 @@ const UserSignup = () => {
                 className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
                 type="text"
                 placeholder='First name'
+                name="firstname"
+                value={firstName}
+                onChange={handleChange}
               />
               <input
                 required
                 className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
                 type="text"
                 placeholder='Last name'
+                name="lastname"
+                value={lastName}
+                onChange={handleChange}
               />
             </div>
-
             <h3 className='text-lg font-medium mb-2'>What's your email</h3>
             <input
               required
               className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
               type="email"
               placeholder='email@example.com'
+              name="email"
+              value={email}
+              onChange={handleChange}
             />
-
             <h3 className='text-lg font-medium mb-2'>Enter Password</h3>
             <input
               className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
               required
               type="password"
               placeholder='password'
+              name="password"
+              value={password}
+              onChange={handleChange}
             />
-
             <button
               className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
             >Create account</button>
